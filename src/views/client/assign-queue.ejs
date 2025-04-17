@@ -1,0 +1,59 @@
+<!-- src/views/client/assign-queue.ejs -->
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= content.title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/client/assign-queue.css" />
+</head>
+<body>
+  <div class="ticket-container">
+    <div class="ticket-header">
+      <h2><%= content.title %></h2>
+      <button class="print-btn" onclick="window.print()">&#x2398;</button>
+    </div>
+    <div class="ticket-body">
+      <div class="ticket-number"><%= ticketNumber %></div>
+
+      <div class="ticket-info">
+        <span class="info-label"><%= content.client_type %></span>
+        <span class="info-value">
+          <%= clientType.charAt(0).toUpperCase() + clientType.slice(1) %>
+          <% if (clientType === 'vip') { %>
+            <span class="badge vip"><%= content.vip %></span>
+          <% } else if (clientType === 'special') { %>
+            <span class="badge special"><%= content.special %></span>
+          <% } else { %>
+            <span class="badge regular"><%= content.regular %></span>
+          <% } %>
+        </span>
+      </div>
+
+      <div class="ticket-info">
+        <span class="info-label"><%= content.name %></span>
+        <span class="info-value"><%= name %></span>
+      </div>
+      <div class="ticket-info">
+        <span class="info-label"><%= content.phone %></span>
+        <span class="info-value"><%= phone %></span>
+      </div>
+      <div class="ticket-info">
+        <span class="info-label"><%= content.service %></span>
+        <span class="info-value"><%= service %></span>
+      </div>
+      <div class="ticket-info">
+        <span class="info-label"><%= content.counter %></span>
+        <span class="info-value"><%= assignedCounter %></span>
+      </div>
+      <div class="status-message"><%= content.status_message %></div>
+    </div>
+    <div class="ticket-footer">
+      <a href="/client" class="btn btn-secondary"><%= content.go_home %></a>
+      <a href="/client/queue" class="btn btn-primary"><%= content.view_queue %></a>
+    </div>
+    <div class="footer-year">&copy; <%= year %> Tcashbank System</div>
+  </div>
+</body>
+</html>

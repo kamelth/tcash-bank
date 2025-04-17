@@ -1,0 +1,119 @@
+<!-- src/views/admin/staff-management.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Staff Management – TcashBank</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link rel="stylesheet" href="/admin/staff-management.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1><i class="fas fa-users-cog btn-icon"></i>Staff Management</h1>
+      <a href="/admin/dashboard" class="btn btn-secondary">
+        <i class="fas fa-arrow-left btn-icon"></i>Back to Dashboard
+      </a>
+    </div>
+
+    <% if (deleteSuccess) { %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle btn-icon"></i>Staff record deleted successfully!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
+    <% if (deleteError) { %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle btn-icon"></i><%= deleteError %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
+
+    <div class="mb-3">
+      <a href="/admin/staff/add" class="btn btn-primary">
+        <i class="fas fa-user-plus btn-icon"></i>Add New Staff
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th><i class="fas fa-user btn-icon"></i>Username</th>
+              <th><i class="fas fa-id-badge btn-icon"></i>Role</th>
+              <th><i class="fas fa-cogs btn-icon"></i>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (staffList.length) { staffList.forEach(staff => { %>
+              <tr>
+                <td><%= staff.username %></td>
+                <td>
+                  <% if (staff.role === 'admin') { %>
+                    <i class="fas fa-user-shield text-primary btn-icon"></i>
+                  <% } else { %>
+                    <i class="fas fa-user-tie text-success btn-icon"></i>
+                  <% } %>
+                  <%= staff.role.charAt(0).toUpperCase() + staff.role.slice(1) %>
+                </td>
+                <td class="action-btns">
+                  <a href="/admin/staff/edit/<%= staff.id %>" class="btn btn-warning btn-sm">
+                    <i class="fas fa-edit btn-icon"></i>Edit
+                  </a>
+                  <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal<%= staff.id %>">
+                    <i class="fas fa-trash-alt btn-icon"></i>Delete
+                  </button>
+                  <div class="modal fade" id="deleteModal<%= staff.id %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= staff.id %>" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                          <h5 class="modal-title" id="deleteModalLabel<%= staff.id %>">
+                            <i class="fas fa-exclamation-triangle btn-icon"></i>Confirm Delete
+                          </h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Are you sure you want to delete staff member <strong><%= staff.username %></strong>?
+                          <div class="alert alert-warning mt-3">
+                            <i class="fas fa-info-circle btn-icon"></i>This action cannot be undone.
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times btn-icon"></i>Cancel
+                          </button>
+                          <a href="/admin/staff?delete_id=<%= staff.id %>" class="btn btn-danger">
+                            <i class="fas fa-trash-alt btn-icon"></i>Delete
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <% }) } else { %>
+              <tr>
+                <td colspan="3" class="text-center">
+                  <i class="fas fa-info-circle btn-icon"></i>No staff records found
+                </td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

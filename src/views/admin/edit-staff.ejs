@@ -1,0 +1,99 @@
+<!-- src/views/admin/edit-staff.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Staff Member – TcashBank</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link rel="stylesheet" href="/admin/edit-staff.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1><i class="fas fa-user-edit btn-icon"></i>Edit Staff Member</h1>
+      <a href="/admin/staff" class="btn btn-secondary">
+        <i class="fas fa-arrow-left btn-icon"></i>Back to Staff List
+      </a>
+    </div>
+
+    <% if (successMessage) { %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle btn-icon"></i><%= successMessage %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
+    <% if (errorMessage) { %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle btn-icon"></i><%= errorMessage %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
+
+    <% if (staff) { %>
+      <div class="card">
+        <div class="card-header bg-light">
+          <i class="fas fa-id-card btn-icon"></i>ID: <%= staff.id %> |
+          <i class="fas fa-user-tag btn-icon"></i>Role: <%= staff.role.charAt(0).toUpperCase() + staff.role.slice(1) %>
+        </div>
+        <div class="card-body">
+          <form action="/admin/staff/edit/<%= staff.id %>" method="post">
+            <div class="mb-3">
+              <label for="username" class="form-label">
+                <i class="fas fa-user btn-icon"></i>Staff Name
+              </label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                class="form-control"
+                value="<%= staff.username %>"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="counter_assigned" class="form-label">
+                <i class="fas fa-desktop btn-icon"></i>Assign Counter
+              </label>
+              <select
+                id="counter_assigned"
+                name="counter_assigned"
+                class="form-control"
+                required
+              >
+                <option value="1" <%= staff.counterAssigned==1?'selected':'' %>>Loan</option>
+                <option value="2" <%= staff.counterAssigned==2?'selected':'' %>>Customer Care</option>
+                <option value="3" <%= staff.counterAssigned==3?'selected':'' %>>Withdrawal</option>
+                <option value="4" <%= staff.counterAssigned==4?'selected':'' %>>Banking</option>
+                <option value="5" <%= staff.counterAssigned==5?'selected':'' %>>General</option>
+                <option value="6" <%= staff.counterAssigned==6?'selected':'' %>>Special</option>
+                <option value="7" <%= staff.counterAssigned==7?'selected':'' %>>VIP</option>
+              </select>
+              <div class="form-text text-muted mt-1">
+                <i class="fas fa-info-circle btn-icon"></i>Select which counter this staff member will operate
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save btn-icon"></i>Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    <% } %>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

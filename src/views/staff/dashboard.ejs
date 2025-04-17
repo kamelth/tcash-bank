@@ -1,0 +1,114 @@
+<!-- src/views/staff/dashboard.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff Dashboard – TcashBank</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/staff/dashboard.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1><i class="fas fa-tachometer-alt icon-spacing"></i>Staff Dashboard</h1>
+      <div>
+        <a href="/" class="btn btn-secondary"><i class="fas fa-home icon-spacing"></i>Home</a>
+        <a href="/staff/logout" class="btn btn-danger"><i class="fas fa-sign-out-alt icon-spacing"></i>Logout</a>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="counter-info bg-light">
+          <h2><i class="fas fa-user-circle icon-spacing"></i>Welcome, <%= staffUsername %></h2>
+          <h4><i class="fas fa-desktop icon-spacing"></i>Your Assigned Counter:
+            <span class="badge-counter"><%= displayCounterName %></span>
+          </h4>
+          <p><i class="far fa-clock icon-spacing"></i>Active since: <%= new Date(createdAt).toLocaleTimeString() %></p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="alert alert-info">
+          <h4><i class="fas fa-chart-line icon-spacing"></i>Queue Statistics</h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="stat-card">
+                <div class="stat-number"><i class="fas fa-users icon-spacing"></i><%= clientCount %></div>
+                <div class="stat-label">Clients Waiting</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="stat-card">
+                <div class="stat-number"><i class="fas fa-check-circle icon-spacing"></i><%= totalServed %></div>
+                <div class="stat-label">Clients Served Today</div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number"><i class="fas fa-hourglass-half icon-spacing"></i><%= avgWaitTime %> min</div>
+            <div class="stat-label">Average Wait Time</div>
+          </div>
+          <% if (clientCount === 0) { %>
+            <div class="alert alert-warning"><i class="fas fa-exclamation-triangle icon-spacing"></i>No available clients in your queue.</div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <h3><i class="fas fa-list-alt icon-spacing"></i>Waiting Queue</h3>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Ticket Number</th>
+          <th>Service Type</th>
+          <th>Waiting Since</th>
+          <th>Wait Duration</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% queueData.forEach(ticket => { %>
+          <% const wait = Math.round((Date.now() - new Date(ticket.timestamp).getTime()) / 60000); %>
+          <% let waitClass = wait > 15 ? 'text-danger' : (wait > 10 ? 'text-warning' : 'text-success'); %>
+          <tr>
+            <td><%= ticket.ticketNumber %></td>
+            <td><%= ticket.serviceName %></td>
+            <td><%= new Date(ticket.timestamp).toLocaleTimeString() %></td>
+            <td class="<%= waitClass %>"><%= wait %> min</td>
+            <td>
+              <button type="button" class="btn btn-primary call-ticket"
+                data-ticket="<%= ticket.ticketNumber %>"
+                data-counter="<%= displayCounterName %>">
+                <i class="fas fa-bullhorn icon-spacing"></i>Call Ticket
+              </button>
+              <a href="/staff/dashboard?complete_ticket_id=<%= ticket.id %>" class="btn btn-success">
+                <i class="fas fa-check-circle icon-spacing"></i>Complete
+              </a>
+            </td>
+          </tr>
+        <% }) %>
+        <% if (queueData.length === 0) { %>
+          <tr><td colspan="5" class="text-center">No tickets waiting in queue</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    document.querySelectorAll('.call-ticket').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const ticket = btn.getAttribute('data-ticket');
+        const counter = btn.getAttribute('data-counter');
+        const message = `Ticket number ${ticket.split('').join(' ')}. Please proceed to ${counter}.`;
+        if ('speechSynthesis' in window) {
+          const u = new SpeechSynthesisUtterance(message);
+          u.rate = 0.9; u.pitch = 1.2;
+          window.speechSynthesis.speak(u);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

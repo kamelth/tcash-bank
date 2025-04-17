@@ -1,0 +1,69 @@
+/* public/admin/add-staff.css */
+body {
+    background-color: #f8f9fa;
+    padding: 20px;
+  }
+  .form-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  .form-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-weight: 600;
+  }
+  .btn-submit,
+  .btn-back {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+    margin-top: 10px;
+  }
+  .btn-submit {
+    background-color: #4285f4;
+    border: none;
+    box-shadow: 0 4px 8px rgba(66, 133, 244, 0.2);
+    color: white;
+  }
+  .btn-submit:hover {
+    background-color: #357ae8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(66, 133, 244, 0.3);
+  }
+  .btn-back {
+    background-color: #6c757d;
+    border: none;
+    color: white;
+  }
+  .btn-back:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+  }
+  .login-footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #6c757d;
+  }
+  .alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+  .alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+  }
+  .alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+  }
