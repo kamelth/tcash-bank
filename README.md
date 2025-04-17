@@ -1,15 +1,18 @@
-docker run -d -p 3306:3306 --platform linux/x86_64 --name tcashbank  -e MYSQL_ROOT_PASSWORD=tcashbank mysql:8.4
+# TcashBank Queue Demo
 
-##### Create Database and tables
+## Slides
+See `/slides/presentation.pptx` for the PowerPoint.
 
-```bash
-# Create DB's
-docker exec -it tcashbank mysql -uroot -ptcashbank
+## Source Code
+All server, client, and worker code lives in project main directiry.  
+To run locally (no internet needed):
+1. `docker-compose up -d`    # spins up MySQL & RabbitMQ
+2. `npm install && npm run dev`  # starts Node.js + listener
+3. Point your browser to `http://localhost:3000`
 
-> CREATE DATABASE `tcashbank_queue_system`;
-```
+## Distributed Demo
+- **Machine A** runs MySQL & RabbitMQ (in Docker).  
+- **Machine B** runs Node.js & front‐ends, connecting to Machine A’s IP.  
+- Demonstrates real‑time updates, failure retries, and metrics.
 
-
-```shell
-npm run migration:generate --name={name}
-```
+Enjoy the live demo!

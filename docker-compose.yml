@@ -1,0 +1,50 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.4
+    container_name: tcashbank-db
+    platform: linux/x86_64
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: tcashbank
+      MYSQL_DATABASE: tcashbank_queue_system
+      MYSQL_USER: tcashbank_user
+      MYSQL_PASSWORD: your_password
+    ports:
+      - '3306:3306'
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: tcashbank-rabbit
+    restart: always
+    ports:
+      - '5672:5672'     # AMQP
+      - '15672:15672'   # Management UI
+    networks:
+      - backend
+
+  app:
+    build: .
+    container_name: tcashbank-app
+    restart: always
+    env_file:
+      - .env           # see below
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+      - rabbitmq
+    networks:
+      - backend
+
+volumes:
+  db_data:
+
+networks:
+  backend:
