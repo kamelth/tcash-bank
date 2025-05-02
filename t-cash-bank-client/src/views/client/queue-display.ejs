@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= content.title %></title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
+  <link rel="stylesheet" href="/client/queue-display.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h1><i class="fas fa-users"></i> <%= content.serving_you_better %></h1>
+        <!-- ===== real-time call banner ===== -->
+        <div id="call-banner-container" class="call-banner-container"></div>
+    <div class="row" id="queue-container">
+      <% if (Object.keys(queueData).length === 0) { %>
+        <div class="col-12 text-center">
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> <%= content.no_active_tickets %>
+          </div>
+        </div>
+      <% } else { %>
+        <% Object.entries(queueData).forEach(([counter, tickets]) => { %>
+          <div class="col-md-3">
+            <div class="card counter-card">
+              <div class="card-header">
+                <i class="fas fa-desktop"></i> <%= counter %>
+              </div>
+              <div class="card-body">
+                <ul class="ticket-list">
+                  <% tickets.forEach(t => { %>
+                    <% const wait = Math.round((Date.now() - (new Date(t.timestamp).getTime() + 3 * 60 * 60 * 1000)) / 60000); %>
+                    <% const waitDisplay = `${wait} minute${wait > 1 ? 's' : ''} ago`;
+                    %>
+                    <li>
+                      <div class="ticket-info">
+                        <div>
+                          <div class="ticket-number">
+                            <i class="fas fa-ticket-alt"></i> <%= t.ticketNumber %>
+                          </div>
+                          <div class="service-type">
+                            <i class="fas fa-concierge-bell"></i> <%= t.serviceName %>
+                          </div>
+                        </div>
+                        <div class="waiting-time">
+                          <i class="far fa-clock"></i> <%= waitDisplay %> <%= content.waiting_time %>
+                        </div>
+                      </div>
+                    </li>
+                  <% }) %>
+                </ul>
+              </div>
+              <span class="counter-badge"><%= counterCounts[counter] %> waiting</span>
+            </div>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+
+
+    <div class="text-center">
+      <a href="/" class="btn btn-primary mt-4">
+        <i class="fas fa-home"></i> <%= content.back_to_home %>
+      </a>
+    </div>
+    <div class="footer-year">&copy; <%= year %> Tcashbank System</div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  <script>
+    const bannerContainer = document.getElementById('call-banner-container');
+    const bannerHistory = [];
+  
+    async function fetchQueueData() {
+      let isCallingTickets = [];
+  
+      try {
+        const response = await fetch('/client/queue/data');
+        const data = await response.json();
+        const { queueData, counterCounts } = data;
+  
+        const container = document.getElementById('queue-container');
+        container.innerHTML = ''; // Clear existing content
+  
+        if (Object.keys(queueData).length === 0) {
+          container.innerHTML = `
+            <div class="col-12 text-center">
+              <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> <%= content.no_active_tickets %>
+              </div>
+            </div>
+          `;
+          return;
+        }
+  
+        Object.entries(queueData).forEach(([counter, tickets]) => {
+          let ticketList = '';
+          const calling = tickets.filter(t => t.isCalling);
+          isCallingTickets.push(...calling); // merge all calling tickets across counters
+  
+          tickets.forEach(t => {
+            const wait = Math.round(
+              (Date.now() - (new Date(t.timestamp).getTime() + 3 * 60 * 60 * 1000)) / 60000
+            );
+            const waitDisplay = `${wait} minute${wait > 1 ? 's' : ''} ago`;
+            ticketList += `
+              <li>
+                <div class="ticket-info">
+                  <div>
+                    <div class="ticket-number">
+                      <i class="fas fa-ticket-alt"></i> ${t.ticketNumber}
+                    </div>
+                    <div class="service-type">
+                      <i class="fas fa-concierge-bell"></i> ${t.serviceName}
+                    </div>
+                  </div>
+                  <div class="waiting-time">
+                    <i class="far fa-clock"></i> ${waitDisplay}
+                  </div>
+                </div>
+              </li>
+            `;
+          });
+  
+          container.innerHTML += `
+            <div class="col-md-3">
+              <div class="card counter-card">
+                <div class="card-header">
+                  <i class="fas fa-desktop"></i> ${counter}
+                </div>
+                <div class="card-body">
+                  <ul class="ticket-list">
+                    ${ticketList}
+                  </ul>
+                </div>
+                <span class="counter-badge">${counterCounts[counter] || 0} waiting</span>
+              </div>
+            </div>
+          `;
+        });
+  
+        // Add new banners (skip duplicates)
+        for (const ticket of isCallingTickets) {
+          const alreadyExists = bannerHistory.some(
+            (b) => b.dataset.ticketNumber === String(ticket.ticketNumber)
+          );
+          if (alreadyExists) continue;
+  
+          const banner = document.createElement('div');
+          banner.className = 'call-banner visible';
+          banner.dataset.ticketNumber = ticket.ticketNumber;
+          banner.innerHTML = `
+            <div class="card banner-card">
+              <div class="card-header banner-header">
+                <i class="fas fa-bullhorn"></i> CALLING
+              </div>
+              <div class="card-body text-center">
+                <div class="fs-5 fw-bold">Ticket <span>${ticket.ticketNumber}</span></div>
+                <div class="text-muted">at ${ticket.counter || 'Counter'}</div>
+              </div>
+            </div>
+          `;
+  
+          bannerContainer.prepend(banner);
+          bannerHistory.unshift(banner);
+        }
+  
+        // Remove banners no longer marked as isCalling
+        for (let i = bannerHistory.length - 1; i >= 0; i--) {
+          const banner = bannerHistory[i];
+          const stillCalling = isCallingTickets.some(
+            (t) => String(t.ticketNumber) === banner.dataset.ticketNumber
+          );
+          if (!stillCalling) {
+            banner.remove();
+            bannerHistory.splice(i, 1);
+          }
+        }
+  
+        // Limit to 3 banners max
+        while (bannerHistory.length > 3) {
+          const removed = bannerHistory.pop();
+          removed.remove();
+        }
+  
+      } catch (err) {
+        console.error('Failed to fetch queue data:', err);
+      }
+    }
+  
+    setInterval(fetchQueueData, 5000);
+    fetchQueueData();
+  </script>
+  
+</body>
+</html>

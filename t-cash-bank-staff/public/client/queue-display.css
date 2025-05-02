@@ -1,0 +1,107 @@
+/* public/display/queue-display.css */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 1200px;
+    margin-top: 50px;
+  }
+  h1 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+  .counter-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    transition: all 0.3s ease;
+    height: 100%;
+  }
+  .counter-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  }
+  .card-header {
+    font-size: 1.5rem;
+    text-align: center;
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    border-radius: 10px 10px 0 0;
+    text-transform: uppercase;
+  }
+  .counter-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .ticket-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  .ticket-list li {
+    background-color: #e9ecef;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    color: #333;
+    transition: all 0.3s ease;
+    border-left: 4px solid #007bff;
+  }
+  .ticket-list li:hover {
+    background-color: #dce3f3;
+  }
+  .ticket-info {
+    display: flex;
+    justify-content: space-between;
+  }
+  .ticket-number {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  .service-type {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 5px;
+  }
+  .waiting-time {
+    font-size: 0.9rem;
+    margin-top: 5px;
+  }
+  .no-tickets {
+    text-align: center;
+    padding: 20px;
+    color: #6c757d;
+  }
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+  }
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+  .footer-year {
+    text-align: center;
+    margin: 20px 0;
+    color: #6c757d;
+  }

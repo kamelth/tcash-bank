@@ -1,0 +1,31 @@
+/* public/staff/login.css */
+body {
+    background-color: #f4f7fa;
+    font-family: Arial, sans-serif;
+  }
+  .container {
+    max-width: 400px;
+    margin: 100px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  h1 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+  }
+  .input-group-text {
+    background-color: #007bff;
+    color: white;
+    border: none;
+  }
+  .btn-primary {
+    width: 100%;
+    font-size: 1.2rem;
+  }
+  .home-btn {
+    text-align: center;
+    margin-top: 15px;
+  }

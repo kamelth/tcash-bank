@@ -1,0 +1,36 @@
+/* public/client/index.css */
+body {
+    background: linear-gradient(to right, #4285f4, #34a853);
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+  }
+  .container {
+    max-width: 500px;
+    margin: auto;
+    padding-top: 60px;
+    text-align: center;
+  }
+  .card {
+    background: #fff;
+    color: #333;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: left;
+  }
+  .btn-lg {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    margin-top: 10px;
+  }
+  .btn-home {
+    background-color: #ffc107;
+    color: #333;
+    font-weight: bold;
+    margin-top: 20px;
+    display: block;
+    padding: 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+  }
