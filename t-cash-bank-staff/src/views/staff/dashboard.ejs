@@ -70,7 +70,7 @@
       </thead>
       <tbody id="queue-table-body">
         <% queueData.forEach(ticket => { %>
-          <% const wait = Math.round((Date.now() - (new Date(ticket.timestamp).getTime() + 3 * 60 * 60 * 1000)) / 60000); %>
+          <% const wait = Math.round((Date.now() - new Date(ticket.timestamp).getTime()) / 60000); %>
           <% const waitDisplay = `${wait} minute${wait > 1 ? 's' : ''} ago`; %>
           <% let waitClass = wait > 15 ? 'text-danger' : (wait > 10 ? 'text-warning' : 'text-success'); %>
           <tr>
@@ -139,9 +139,7 @@
         }
   
         data.queueData.forEach(ticket => {
-          const wait = Math.round(
-              (Date.now() - (new Date(ticket.timestamp).getTime() + 3 * 60 * 60 * 1000)) / 60000
-            );
+          const wait = Math.round((Date.now() - new Date(ticket.timestamp).getTime()) / 60000);
           const waitDisplay = `${wait} minute${wait > 1 ? 's' : ''} ago`;
           const waitClass = wait > 15 ? 'text-danger' : (wait > 10 ? 'text-warning' : 'text-success');
           tbody.innerHTML += `
